@@ -4,42 +4,41 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#ffffff">
-  <title>慢慢冒险</title>
-  <link rel="stylesheet" href="yangshi.css">
-  <script src="shezhi.js" defer></script>
-  <script src="youxi.js" defer></script>
+  <title>Game1028 · 摸鱼宇宙</title>
+  <link rel="stylesheet" href="yangshi.css?v=2">
+  <script src="shezhi.js?v=2" defer></script>
+  <script src="youxi.js?v=2" defer></script>
 </head>
 <body>
   <main class="app">
     <header class="top">
-      <div class="wallet">金币 <output id="jinbi">2000</output></div>
-      <button id="bangzhu" class="help">？玩法</button>
+      <div class="wallet"><span>金币</span><output id="jinbi">2000</output></div>
+      <button id="bangzhu" class="help" aria-label="查看玩法">？玩法</button>
     </header>
-    <section class="scene">
-      <nav class="menu">
-        <button data-page="qiandao">签到 <i id="q-dot"></i></button>
-        <button data-page="dati">答题 <i id="d-dot"></i></button>
+    <section class="scene" aria-label="手绘小人的休闲天地">
+      <nav class="menu" aria-label="游戏功能">
+        <button data-page="qiandao">签到<i id="q-dot"></i></button>
+        <button data-page="dati">答题<i id="d-dot"></i></button>
         <button data-page="shangdian">商店</button>
         <button data-page="yigui">衣柜</button>
       </nav>
       <div class="person">
-        <div id="speak" class="speak"></div>
-        <button id="xiaoren" class="avatar-button" aria-label="戳戳小人"><span id="avatar"></span></button>
-        <small>戳戳我 ♡</small>
+        <div id="speak" class="speak" aria-live="polite"></div>
+        <button id="xiaoren" class="avatar-button" aria-label="戳戳小人听吐槽"><span id="avatar"></span></button>
+        <small>戳一下，听我胡说八道 ♡</small>
       </div>
     </section>
     <section class="hunt-home">
       <button class="hunt-button" data-page="dalie" id="hunt-label">打猎</button>
-      <p id="hunt-time">耗费 6 小时！</p>
-      <small>随机获得 50～200 金币</small>
-      <small>可能获得帽子、衣服、小配饰 ♡</small>
+      <p id="hunt-time">离家出走 6 小时（会回来）</p>
+      <small>回来时随机带回 50～200 金币</small>
+      <small>运气爆炸还能捡到时尚单品 ✨</small>
     </section>
-    <footer>给家人的慢生活小游戏 · 黑白手绘版</footer>
   </main>
-  <dialog id="window">
-    <div class="popup-head"><strong id="popup-title"></strong><button id="guanbi" aria-label="关闭">×</button></div>
+  <dialog id="window" aria-labelledby="popup-title">
+    <div class="popup-head"><strong id="popup-title"></strong><button id="guanbi" aria-label="关闭弹窗">×</button></div>
     <div id="popup-body"></div>
   </dialog>
-  <div id="tip" role="status"></div>
+  <div id="tip" role="status" aria-live="polite"></div>
 </body>
 </html>
