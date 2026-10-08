@@ -1,6 +1,6 @@
 /* youxi.js = 游戏。这里有小人绘制、签到、答题、商店、换装、打猎。
    改题目、商品名字、金币数量、价格，请优先去 shezhi.js。
-   版本 v2：发型、上衣、裤子、帽子、面饰，每类正好十种。
+   版本 v3：每日题目不重复，题库支持随时追加；五类换装每类十种。
 */
 (() => {
 'use strict';
@@ -17,7 +17,7 @@ const clip=(v,a,b)=>Math.min(b,Math.max(a,v));
 function hash(t){let h=2166136261;for(const c of t){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return h>>>0}
 function wait(ms){if(ms<=0)return '可以领取啦！';const s=Math.ceil(ms/1000);return [Math.floor(s/3600),Math.floor(s%3600/60),s%60].map(x=>String(x).padStart(2,'0')).join(':')}
 const defaults={hair:'hair-pony-black',top:'top-white',pants:'pants-black',hat:null,face:null};
-function fresh(){return {coins:P.chushi,checkins:[],quizCompleted:[],inventory:['hair-pony-black','top-white','pants-black'],equipped:{...defaults},hunt:null,shop:null}}
+function fresh(){return {coins:P.chushi,checkins:[],quizCompleted:[],quizAskedIds:[],quizDaily:null,inventory:['hair-pony-black','top-white','pants-black'],equipped:{...defaults},hunt:null,shop:null}}
 /* 从上一版升级：保留金币、签到、答题与打猎；旧款道具换成新款对应物。 */
 const LEGACY={
   'plain-dress':'top-white','striped-dress':'top-racer','star-dress':'top-sequin',
@@ -33,6 +33,16 @@ function load(){
   s.coins=Number.isFinite(source.coins)?clip(Math.floor(source.coins),0,999999999):s.coins;
   for(const t of ['checkins','quizCompleted']){
     if(Array.isArray(source[t]))s[t]=[...new Set(source[t].filter(x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x)))];
+  }
+  // 已经出现过的题目、今天分配的题目，都和金币一起写入老存档键。
+  // 沿用 v2 存档键，升级不会清空金币、签到、衣柜和旧答题日期。
+  if(Array.isArray(source.quizAskedIds)){
+    s.quizAskedIds=[...new Set(source.quizAskedIds.filter(id=>typeof id==='string'&&id.length<500))];
+  }
+  if(source.quizDaily&&typeof source.quizDaily==='object'&&
+     /^\d{4}-\d{2}-\d{2}$/.test(source.quizDaily.date||'')&&
+     (source.quizDaily.id===null||typeof source.quizDaily.id==='string')){
+    s.quizDaily={date:source.quizDaily.date,id:source.quizDaily.id};
   }
   if(Array.isArray(source.inventory)){
     for(const rawId of source.inventory){const id=BY[rawId]?rawId:LEGACY[rawId];if(id&&!s.inventory.includes(id))s.inventory.push(id)}
@@ -231,18 +241,74 @@ function qiandao(){
     $('sign').onclick=()=>{if(state.checkins.includes(today()))return;state.checkins.push(today());state.coins+=P.qiandao;save();tip(`签到成功！+${P.qiandao} 金币，富得很克制。`);draw()};
   }draw();
 }
-/* 2. 答题 */
+/* 2. 答题：每天一道，出过的不再出；题库随时可扩充。 */
+function quizBank(){
+  const ids=new Set();
+  return (Array.isArray(P.timu)?P.timu:[]).filter(q=>
+    q&&typeof q.question==='string'&&q.question.trim()&&
+    Array.isArray(q.options)&&q.options.length>=2&&q.options.length<=10&&
+    q.options.every(o=>typeof o==='string')&&
+    Number.isInteger(q.answer)&&q.answer>=0&&q.answer<q.options.length
+  ).map(q=>({
+    ...q,
+    // 优先使用手动 id，否则按「题干」记住。不要随意修改已出题的题干。
+    _qid:(typeof q.id==='string'&&q.id.trim())?'id:'+q.id.trim():'question:'+q.question.trim()
+  })).filter(q=>{
+    if(ids.has(q._qid))return false;ids.add(q._qid);return true;
+  });
+}
+function dailyQuiz(){
+  const bank=quizBank(),day=today();
+  // v2 的存档只记得「哪天答对」，不知道当时的题目是什么。
+  // 若当天已经答对，无论题目后来是否增删，都不能再抽一题刷金币。
+  const assigned=state.quizDaily?.date===day?state.quizDaily.id:null;
+  if(state.quizCompleted.includes(day)){
+    const q=assigned?bank.find(item=>item._qid===assigned):null;
+    return {question:q||null,done:true,asked:state.quizAskedIds.length,total:bank.length};
+  }
+  if(assigned){
+    const q=bank.find(item=>item._qid===assigned);
+    if(q)return {question:q,done:state.quizCompleted.includes(day),asked:state.quizAskedIds.length,total:bank.length};
+  }
+  // 不管当天答对与否，只要展示过，就永久标记为已出过。
+  const unseen=bank.filter(q=>!state.quizAskedIds.includes(q._qid));
+  if(!unseen.length){
+    if(state.quizDaily?.date!==day||state.quizDaily.id!==null){
+      state.quizDaily={date:day,id:null};save();
+    }
+    return {question:null,done:state.quizCompleted.includes(day),asked:state.quizAskedIds.length,total:bank.length};
+  }
+  // 同一天固定一题，重新打开/刷新不会抽到不同的题；添加新题也不影响今日题目。
+  const seed=hash('Game1028-quiz-'+day+'-'+state.quizAskedIds.length);
+  const q=unseen[seed%unseen.length];
+  state.quizDaily={date:day,id:q._qid};
+  state.quizAskedIds.push(q._qid);
+  save();
+  return {question:q,done:false,asked:state.quizAskedIds.length,total:bank.length};
+}
 function dati(){
   modal('每日答题 · 家庭八卦考场');let chosen=-1,wrong=false;
   function draw(){
-    const qs=P.timu,q=qs.length?qs[hash(today())%qs.length]:null;
-    if(!q){body.textContent='题库空空如也！去 shezhi.js 加几道题吧。';return}
-    const done=state.quizCompleted.includes(today());
-    const choices=q.options.map((v,i)=>`<button class="select ${chosen===i?'active':''}" data-choice="${i}" ${done?'disabled':''}>${'ABCD'[i]||i}. ${esc(v)}</button>`).join('');
-    body.innerHTML=`<p class="intro">我考的不是知识，是你到底有多了解我！答对 +${P.dati} 金币。</p><div class="paper"><small>今日脑洞 · ${today()}</small><h3>${esc(q.question)}</h3>${choices}</div><p class="sub">${done?'今天过关！奖励早就到账啦～':wrong?'错啦！再想想，不要闭眼乱蒙。':'选好答案，勇敢交卷。'}</p>${done?'':`<button id="answer" class="action" ${chosen<0?'disabled':''}>交卷！</button>`}<p class="sub">答错可以重试，但每天答对只发一次钱。</p>`;
+    const {question:q,done,asked,total}=dailyQuiz();
+    if(!q){
+      body.innerHTML=`<div class="paper"><h3>${done?'今天已经答过啦！':'题库被你刷通关啦！'}</h3><p>${done?'今日 100 金币已经结算，明天再来。':'已出过 '+asked+' 道题，暂时没有新题了。'}</p><p>想继续开考？去 <b>shezhi.js</b> 的 <b>timu</b> 最后追加题目，刷新网站就能继续；旧题不会重来。</p></div>`;
+      return;
+    }
+    const day=today();
+    const choices=q.options.map((v,i)=>`<button class="select ${chosen===i?'active':''}" data-choice="${i}" ${done?'disabled':''}>${'ABCDEFGHIJ'[i]||i}. ${esc(v)}</button>`).join('');
+    body.innerHTML=`<p class="intro">今天抽到一道家庭八卦！答对 +${P.dati} 金币。<br><small>已出题 ${Math.min(asked,total)} / ${total} · 不重复挑战</small></p><div class="paper"><small>今日脑洞 · ${day}</small><h3>${esc(q.question)}</h3>${choices}</div><p class="sub">${done?'今天过关！奖励早就到账啦～':wrong?'错啦！再想想，不要闭眼乱蒙。':'选好答案，勇敢交卷。'}</p>${done?'':`<button id="answer" class="action" ${chosen<0?'disabled':''}>交卷！</button>`}<p class="sub">答错可继续重试；一天只发一次答题金币。</p>`;
     body.querySelectorAll('[data-choice]').forEach(btn=>btn.onclick=()=>{chosen=+btn.dataset.choice;wrong=false;draw()});
-    if($('answer'))$('answer').onclick=()=>{if(chosen!==q.answer){chosen=-1;wrong=true;draw();return}if(!state.quizCompleted.includes(today())){state.quizCompleted.push(today());state.coins+=P.dati;save();tip(`满分选手！金币 +${P.dati}`)}draw()};
-  }draw();
+    if($('answer'))$('answer').onclick=()=>{
+      // 跨过零点后如果弹窗没有关，也不能用昨天的题领取今天的金币。
+      if(today()!==day){chosen=-1;wrong=false;draw();return}
+      if(chosen!==q.answer){chosen=-1;wrong=true;draw();return}
+      if(!state.quizCompleted.includes(day)){
+        state.quizCompleted.push(day);state.coins+=P.dati;save();tip(`满分选手！金币 +${P.dati}`);
+      }
+      draw();
+    };
+  }
+  draw();
 }
 /* 3. 商店 */
 function shangdian(){
@@ -301,7 +367,7 @@ function dalie(){
 }
 function bangzhu(){
   modal('玩法 · 一份不正经说明书');
-  body.innerHTML=`<div class="paper" style="line-height:1.9;font-size:14px"><p>🗓 签到：每天赚 ${P.qiandao} 金币，早起的鸟儿有零花钱。</p><p>🧠 答题：每天一题，答对 +${P.dati} 金币，错了继续猜。</p><p>🌲 打猎：出门 ${P.xiaoshi} 小时，回来拿金币，还可能捡到服装。</p><p>🛍 商店：每天固定刷新 4 件，想买就得攒钱。</p><p>🎀 衣柜：发型、上衣、裤子、帽子、面饰共 50 件单品。帽子与面饰可摘下。</p><hr><p>存档只在当前浏览器保存；换手机不会自动同步。清除网站数据可能丢失进度哦。</p></div>`;
+  body.innerHTML=`<div class="paper" style="line-height:1.9;font-size:14px"><p>🗓 签到：每天赚 ${P.qiandao} 金币，早起的鸟儿有零花钱。</p><p>🧠 答题：每天一题，题库用完前不会重复；答对 +${P.dati} 金币，错了继续猜。</p><p>🌲 打猎：出门 ${P.xiaoshi} 小时，回来拿金币，还可能捡到服装。</p><p>🛍 商店：每天固定刷新 4 件，想买就得攒钱。</p><p>🎀 衣柜：发型、上衣、裤子、帽子、面饰共 50 件单品。帽子与面饰可摘下。</p><hr><p>存档只在当前浏览器保存；换手机不会自动同步。清除网站数据可能丢失进度哦。</p></div>`;
 }
 const pages={qiandao,dati,shangdian,yigui,dalie};
 document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>pages[b.dataset.page]?.());
