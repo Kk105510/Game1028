@@ -13,10 +13,10 @@ window.SHEZHI = {
   zuiduo: 200,       // 打猎金币最高
   liwu: 0.40,        // 打猎捡到礼物的概率
   timu: [
-    {question:'【示例】我周末最爱的运动是什么？',options:['优雅地躺着','冲刺去开会','跑去打印店'],answer:0},
-    {question:'【示例】如果有一张免费机票，我会？',options:['拿去垫桌脚','立刻收拾行李','研究PPT'],answer:1},
-    {question:'【示例】最让人心跳加速的四个字是？',options:['主动加班','文件损坏','今晚吃啥'],answer:2},
-    {question:'【示例】我收到什么会真心开心？',options:['家人手写卡片','二百页报表','星期一闹钟'],answer:0}
+    { question:'我在读什么专业', options:['创造策划','策展制作','创意策划'], answer:0 },
+    { question:'我在家附近最常吃什么', options:['意面','披萨','焗饭'], answer:1 },
+    { question:'我喜欢的颜色是', options:['红色','黄色','蓝色'], answer:2 },
+    { question:'我喜欢打什么游戏', options:['王者荣耀','第五人格','瓦罗兰特'], answer:1 }
   ]
 };
 
