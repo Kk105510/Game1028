@@ -1,542 +1,110 @@
-/* 文件：yangshi.css（样式）——调整黑白界面、按钮大小和布局 */
-:root {
-  --ink:#191919;
-  --gray:#777
-}
-* {
-  box-sizing:border-box
-}
-html {
-  background:#fff
-}
-body {
-  margin:0;
-  color:var(--ink);
-  font-family:"PingFang SC","Microsoft YaHei",sans-serif;
-  -webkit-tap-highlight-color:transparent
-}
-button {
-  color:inherit;
-  font-family:inherit;
-  cursor:pointer;
-  touch-action:manipulation
-}
-button:disabled {
-  cursor:default;
-  opacity:.55
-}
-.app {
-  max-width:600px;
-  min-height:100svh;
-  margin:auto;
-  padding:0 24px
-}
-.top {
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  min-height:145px;
-  padding-top:42px
-}
-.wallet {
-  display:flex;
-  align-items:center;
-  gap:12px;
-  font-size:22px
-}
-.wallet output {
-  min-width:110px;
-  display:inline-block;
-  text-align:center;
-  border:2.5px solid var(--ink);
-  padding:5px 11px;
-  transform:rotate(-.7deg);
-  font-size:22px
-}
-.help {
-  border:0;
-  background:none;
-  padding:10px 0;
-  text-decoration:underline;
-  text-underline-offset:4px
-}
-.scene {
-  height:clamp(400px,57vh,590px);
-  position:relative
-}
-.menu {
-  position:absolute;
-  z-index:2;
-  top:8%;
-  left:0;
-  display:flex;
-  flex-direction:column;
-  gap:25px
-}
-.menu button {
-  width:122px;
-  height:67px;
-  background:white;
-  border:2.7px solid var(--ink);
-  font-size:29px;
-  position:relative;
-  box-shadow:2px 1px 0 #ddd;
-  transform:rotate(-.6deg)
-}
-.menu button:nth-child(even) {
-  transform:rotate(.6deg)
-}
-.menu button:active,.hunt-button:active {
-  transform:scale(.97)
-}
-.menu i {
-  display:none;
-  width:9px;
-  height:9px;
-  position:absolute;
-  top:5px;
-  right:6px;
-  border-radius:50%;
-  background:var(--ink)
-}
-.menu i.done {
-  display:block
-}
-.person {
-  position:absolute;
-  left:54%;
-  top:0;
-  transform:translateX(-30%);
-  width:72%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center
-}
-.avatar-button {
-  border:0;
-  background:none;
-  width:100%;
-  padding:0
-}
-.avatar-button svg {
-  display:block;
-  width:100%;
-  max-height:510px;
-  overflow:visible;
-  animation:bob 5s ease-in-out infinite
-}
-.person small {
-  color:#aaa;
-  font-size:12px
-}
-.speak {
-  background:white;
-  border:2px solid var(--ink);
-  border-radius:15px 14px 15px 3px;
-  padding:10px 12px;
-  position:absolute;
-  z-index:4;
-  top:3%;
-  left:0;
-  font-size:13px;
-  box-shadow:2px 3px 0 #ddd;
-  display:none;
-  white-space:nowrap
-}
-.speak.on {
-  display:block
-}
-.hunt-home {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  text-align:center;
-  padding-top:14px
-}
-.hunt-button {
-  border:3px solid var(--ink);
-  background:white;
-  width:190px;
-  height:90px;
-  font-size:45px;
-  letter-spacing:.08em;
-  transform:rotate(.4deg)
-}
-.hunt-home p {
-  font-size:19px;
-  margin:17px 0 9px
-}
-.hunt-home small {
-  display:block;
-  font-size:15px;
-  margin:4px 0
-}
-footer {
-  text-align:center;
-  padding:25px 0 20px;
-  color:#aaa;
-  font-size:11px
-}
-@keyframes bob {
-  50% {
-    translate:0 -6px
-  }
-}
-/* 公用弹窗 */
-dialog {
-  width:min(520px,calc(100vw - 26px));
-  max-height:87dvh;
-  overflow:auto;
-  margin:auto;
-  padding:0;
-  background:white;
-  border:2.5px solid var(--ink);
-  border-radius:9px;
-  box-shadow:6px 7px 0 #aaa
-}
-dialog::backdrop {
-  background:#fffd;
-  backdrop-filter:blur(3px)
-}
-.popup-head {
-  padding:14px 18px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:2px solid var(--ink);
-  background:#fff;
-  position:sticky;
-  top:0;
-  z-index:3
-}
-.popup-head strong {
-  font-size:22px
-}
-.popup-head button {
-  font-size:27px;
-  width:36px;
-  height:36px;
-  border:2px solid var(--ink);
-  background:white;
-  border-radius:50%;
-  line-height:25px
-}
-#popup-body {
-  padding:19px 20px 25px
-}
-.intro {
-  text-align:center;
-  font-size:14px;
-  line-height:1.7;
-  color:#444;
-  margin:0 0 20px
-}
-.sub {
-  text-align:center;
-  font-size:12px;
-  line-height:1.7;
-  color:var(--gray);
-  margin:15px 0 3px
-}
-.action {
-  border:2px solid var(--ink);
-  background:#191919;
-  color:white;
-  padding:14px 12px;
-  font-size:17px;
-  width:100%;
-  border-radius:4px;
-  margin-top:15px
-}
-.action:disabled {
-  background:#ddd;
-  color:#555;
-  border-color:#bbb
-}
-.paper {
-  border:2px solid var(--ink);
-  padding:18px;
-  border-radius:7px
-}
-.paper h3 {
-  font-size:19px;
-  line-height:1.5
-}
-.notice {
-  border:1.5px dashed var(--ink);
-  padding:14px;
-  text-align:center;
-  margin-top:15px;
-  line-height:1.7
-}
-.select {
-  width:100%;
-  text-align:left;
-  background:white;
-  border:1.5px solid var(--ink);
-  padding:11px 13px;
-  margin:5px 0;
-  border-radius:5px;
-  font-size:15px
-}
-.select.active,.tab.active {
-  background:var(--ink);
-  color:white
-}
-/* 签到 qiandao */
-.month {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:15px
-}
-.month button {
-  border:1.5px solid var(--ink);
-  background:#fff;
-  font-size:24px;
-  width:39px;
-  height:38px
-}
-.calendar {
-  display:grid;
-  grid-template-columns:repeat(7,minmax(0,1fr));
-  gap:5px
-}
-.weekday {
-  text-align:center;
-  font-size:12px;
-  color:#777
-}
-.day,.blank {
-  aspect-ratio:1;
-  display:grid;
-  place-items:center;
-  position:relative;
-  font-size:14px
-}
-.day {
-  border:1px solid #e6e6e6;
-  border-radius:50%
-}
-.day.today {
-  border:2px solid var(--ink);
-  font-weight:bold
-}
-.day.signed {
-  background:var(--ink);
-  color:white;
-  border-color:var(--ink)
-}
-.day b {
-  font-size:9px;
-  position:absolute;
-  right:3px;
-  bottom:1px
-}
-/* 商店 shangdian 与衣柜 yigui */
-.goods {
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px
-}
-.goods article {
-  border:1.8px solid var(--ink);
-  border-radius:6px;
-  text-align:center;
-  padding:13px 10px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  min-width:0
-}
-.goods .emoji {
-  font-family:serif;
-  font-size:45px;
-  min-height:62px
-}
-.goods h3 {
-  font-size:16px;
-  margin:4px 0
-}
-.goods p {
-  font-size:12px;
-  color:var(--gray);
-  line-height:1.5;
-  min-height:35px
-}
-.goods button {
-  background:var(--ink);
-  color:white;
-  border:1px solid var(--ink);
-  padding:9px 5px;
-  width:100%;
-  margin-top:auto;
-  font-size:12px
-}
-.goods button:disabled {
-  background:#eee;
-  color:#777;
-  border-color:#ccc
-}
-.preview {
-  height:200px;
-  background:#fafafa;
-  border:1px dashed #bbb;
-  border-radius:6px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  margin-bottom:14px
-}
-.preview svg {
-  height:175px;
-  max-width:100%
-}
-.preview small {
-  color:#777
-}
-.tabs {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:5px;
-  margin-bottom:12px
-}
-.tab {
-  background:#fff;
-  border:1.5px solid #999;
-  padding:10px 3px;
-  font-size:13px
-}
-.warditem {
-  border:1.5px solid var(--ink);
-  background:white;
-  text-align:left;
-  padding:13px 9px;
-  min-height:60px
-}
-.warditem.active {
-  background:#eee;
-  border-width:2.5px
-}
-.warditem span {
-  font-size:24px;
-  margin-right:5px
-}
-.empty {
-  grid-column:1/-1;
-  text-align:center;
-  color:#888;
-  font-size:14px;
-  padding:20px 0
-}
-/* 打猎 dalie */
-.hunt-card {
-  border:2px solid var(--ink);
-  padding:25px 15px;
-  text-align:center;
-  border-radius:7px
-}
-.hunt-card .clock {
-  font-size:29px;
-  font-variant-numeric:tabular-nums
-}
-.hunt-card p {
-  color:var(--gray);
-  font-size:13px
-}
-.hunt-art {
-  text-align:center;
-  font-size:60px;
-  margin-bottom:15px
-}
-#tip {
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translate(-50%,20px);
-  max-width:90vw;
-  background:var(--ink);
-  color:white;
-  border-radius:7px;
-  padding:12px 18px;
-  font-size:14px;
-  opacity:0;
-  pointer-events:none;
-  transition:.2s;
-  z-index:100;
-  text-align:center;
-  white-space:nowrap
-}
-#tip.show {
-  opacity:1;
-  transform:translate(-50%,0)
-}
-@media(max-width:480px) {
-  .app {
-    padding:0 17px
-  }
-  .top {
-    min-height:110px;
-    padding-top:20px
-  }
-  .wallet {
-    font-size:18px
-  }
-  .wallet output {
-    font-size:20px;
-    min-width:88px
-  }
-  .scene {
-    height:clamp(365px,54vh,540px)
-  }
-  .menu {
-    top:10%;
-    gap:19px
-  }
-  .menu button {
-    width:96px;
-    height:56px;
-    font-size:24px
-  }
-  .person {
-    left:53%;
-    width:72%;
-    transform:translateX(-30%)
-  }
-  .hunt-button {
-    width:165px;
-    height:76px;
-    font-size:39px
-  }
-  .hunt-home p {
-    font-size:17px
-  }
-  .hunt-home small {
-    font-size:13px
-  }
-  #popup-body {
-    padding:17px 14px 22px
-  }
-}
-@media(max-width:350px) {
-  .menu button {
-    width:85px;
-    height:51px;
-    font-size:21px
-  }
-  .tabs {
-    gap:2px
-  }
-  .tab {
-    font-size:11px
-  }
-}
-@media(prefers-reduced-motion:reduce) {
-  * {
-    animation:none!important;
-    transition:none!important
-  }
-}
+/* yangshi.css = 样式。界面以黑白为主，人物和商品有颜色。 */
+:root{--ink:#191919;--muted:#777;--paper:#fff;--soft:#fafafa}
+*{box-sizing:border-box}
+html{background:#fff}
+body{margin:0;color:var(--ink);font-family:"PingFang SC","Microsoft YaHei",system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:disabled{cursor:default;opacity:.6}
+button:focus-visible{outline:3px solid #7c8fff;outline-offset:3px}
+.app{width:min(100%,620px);min-height:100svh;margin:auto;padding:0 23px 28px}
+.top{min-height:140px;padding-top:40px;display:flex;justify-content:space-between;align-items:flex-start}
+.wallet{display:flex;align-items:center;gap:11px;font-size:21px;white-space:nowrap}
+.wallet output{border:2.5px solid var(--ink);padding:5px 13px;min-width:96px;text-align:center;font-size:22px;transform:rotate(-.8deg);font-variant-numeric:tabular-nums}
+.help{border:0;background:none;text-decoration:underline;text-underline-offset:5px;font-size:13px;padding:10px 0}
+.scene{height:clamp(390px,56vh,580px);position:relative}
+.menu{position:absolute;z-index:2;top:10%;left:0;display:flex;flex-direction:column;gap:25px}
+.menu button{position:relative;background:#fff;border:2.7px solid var(--ink);width:125px;height:67px;font-size:28px;box-shadow:2px 2px 0 #ddd;transform:rotate(-.8deg)}
+.menu button:nth-child(even){transform:rotate(.7deg)}
+.menu button:active,.hunt-button:active{scale:.97}
+.menu i{display:none;width:9px;height:9px;position:absolute;right:6px;top:6px;border-radius:50%;background:#151515}
+.menu i.done{display:block}
+.person{position:absolute;left:54%;top:0;transform:translateX(-28%);height:100%;width:73%;display:flex;flex-direction:column;justify-content:center;align-items:center}
+.avatar-button{padding:0;border:0;background:transparent;width:100%;max-width:320px}
+.avatar-button svg{width:auto;height:min(53vh,460px);max-width:100%;display:block;margin:auto;overflow:visible;animation:bob 4s ease-in-out infinite}
+.person small{font-size:12px;color:#868686;text-align:center}
+.speak{display:none;position:absolute;top:3%;left:0;z-index:5;padding:9px 12px;border:2px solid #111;border-radius:13px 13px 13px 3px;box-shadow:3px 3px 0 #dedede;background:#fff;font-size:13px;max-width:170px;line-height:1.5}
+.speak.on{display:block}
+.hunt-home{text-align:center;display:flex;flex-direction:column;align-items:center;padding-top:6px}
+.hunt-button{width:194px;height:88px;background:#fff;border:3px solid var(--ink);font-size:44px;letter-spacing:.1em;transform:rotate(.8deg)}
+.hunt-home p{font-size:18px;margin:17px 0 9px}
+.hunt-home small{font-size:13px;line-height:1.7;color:#444}
+@keyframes bob{50%{transform:translateY(-7px)}}
+/* 弹窗 */
+dialog{width:min(560px,calc(100vw - 24px));max-height:88dvh;margin:auto;padding:0;border:2.5px solid #171717;border-radius:9px;background:#fff;box-shadow:5px 7px 0 #b7b7b7;overflow:auto}
+dialog::backdrop{background:#fffd;backdrop-filter:blur(3px)}
+.popup-head{position:sticky;top:0;z-index:10;background:#fff;border-bottom:2px solid #171717;display:flex;justify-content:space-between;align-items:center;padding:13px 18px}
+.popup-head strong{font-size:21px}.popup-head button{width:37px;height:37px;font-size:26px;background:#fff;border:2px solid #222;border-radius:50%;line-height:1}
+#popup-body{padding:17px 17px 24px}
+.intro{text-align:center;font-size:14px;line-height:1.7;color:#333;margin:0 0 17px}
+.sub{text-align:center;font-size:12px;line-height:1.7;color:var(--muted);margin:13px 0 3px}
+.action{display:block;width:100%;padding:13px 10px;background:#191919;color:white;border:2px solid #191919;border-radius:4px;font-size:16px;margin-top:14px}
+.action:disabled{background:#e2e2e2;color:#555;border-color:#bbb}
+.paper{padding:15px;border:1.8px solid #222;border-radius:7px}
+.paper h3{font-size:18px;line-height:1.6}
+.notice{text-align:center;border:1.5px dashed #252525;padding:13px;margin-top:15px;font-size:14px;line-height:1.8}
+.select{display:block;width:100%;text-align:left;border:1.5px solid #222;background:#fff;padding:12px;margin:6px 0;border-radius:4px;font-size:14px}
+.select.active,.tab.active{background:#191919;color:#fff}
+.month{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.month button{width:38px;height:36px;border:1.5px solid #222;background:#fff;font-size:21px}
+.calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+.weekday{text-align:center;font-size:12px;color:#777}
+.day,.blank{aspect-ratio:1;display:grid;place-items:center;position:relative;font-size:14px}
+.day{border:1px solid #ddd;border-radius:50%}.day.today{border:2px solid #111;font-weight:700}.day.signed{background:#1b1b1b;color:#fff;border-color:#1b1b1b}.day b{font-size:9px;position:absolute;right:3px;bottom:0}
+/* 商店：每件商品用真实的彩色 SVG 小人预览，不只是 emoji */
+.goods{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}
+.goods article{border:1.7px solid #222;border-radius:8px;min-width:0;overflow:hidden;display:flex;flex-direction:column;align-items:stretch;padding:9px 9px 11px;text-align:center}
+.goods article h3{font-size:14px;line-height:1.45;margin:7px 0 3px}
+.goods article p{font-size:12px;line-height:1.45;color:#777;margin:4px 0 12px;min-height:35px;flex:1}
+.goods article small{font-size:11px;color:#666}
+.product-art{background:linear-gradient(180deg,var(--tint,#f6f6f6) 0%,#fff 90%);height:137px;border-radius:6px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.product-art .avatar-svg{height:172px;width:124px;transform:translateY(16px)}
+.product-art .sticker{position:absolute;top:7px;right:7px;background:#fff;border-radius:100%;height:31px;width:31px;display:grid;place-items:center;font-size:19px;border:1px solid #dedede}
+.goods article button{width:100%;background:#171717;color:#fff;border:1.5px solid #171717;padding:9px 5px;font-size:12px;border-radius:3px}
+.goods article button:disabled{background:#eee;color:#777;border-color:#ccc}
+/* 衣柜：五个标签，完整十件可看见；未解锁的会显示锁 */
+.preview{position:relative;border:1px dashed #aaa;background:#fafafa;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-direction:column;height:211px;margin-bottom:13px;overflow:hidden}
+.preview .avatar-svg{height:190px;flex-shrink:0;margin-top:-9px}
+.preview small{color:#777;font-size:11px}
+.tabs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin-bottom:12px}
+.tab{background:#fff;border:1.5px solid #999;min-width:0;padding:10px 2px;font-size:12px;border-radius:3px}
+.closet-count{color:#6a6a6a;text-align:right;margin:0 0 8px;font-size:12px}
+.ward-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+.warditem{background:#fff;border:1.5px solid #222;border-radius:6px;text-align:left;padding:8px 9px;min-height:85px;display:flex;gap:8px;align-items:center;line-height:1.4}
+.warditem .item-emoji{border:1px solid #ddd;border-radius:50%;flex-shrink:0;display:grid;place-items:center;width:38px;height:38px;font-size:22px;background:var(--tint,#fff)}
+.warditem strong{display:block;font-size:12px;line-height:1.5;font-weight:600;overflow-wrap:anywhere}
+.warditem small{display:block;color:#777;font-size:11px;margin-top:4px}
+.warditem.active{outline:2px solid #161616;background:#f3f3f3;outline-offset:-4px}
+.warditem.locked{border-style:dashed;color:#999;background:#fafafa}
+.warditem.locked .item-emoji{filter:grayscale(1);opacity:.65}
+.warditem.locked strong{color:#777}
+.takeoff{background:#fff;border:1.5px dashed #666;border-radius:5px;padding:12px;width:100%;margin-bottom:10px;font-size:12px;text-align:center}
+/* 打猎 */
+.hunt-art{text-align:center;font-size:55px;margin-bottom:10px}
+.hunt-card{text-align:center;border:2px solid #222;border-radius:7px;padding:22px 12px}
+.hunt-card h3{margin:3px 0 12px;font-size:19px}
+.hunt-card .clock{font-size:29px;font-variant-numeric:tabular-nums}
+.hunt-card p{font-size:12px;color:#777}
+#tip{position:fixed;z-index:100;bottom:22px;left:50%;transform:translate(-50%,20px);max-width:90vw;min-width:180px;text-align:center;border-radius:7px;background:#1c1c1c;color:#fff;padding:13px 17px;font-size:13px;line-height:1.5;opacity:0;pointer-events:none;transition:.2s}
+#tip.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:480px){
+  .app{padding:0 16px 22px}
+  .top{min-height:107px;padding-top:23px}
+  .wallet{font-size:17px;gap:9px}.wallet output{font-size:19px;min-width:81px}
+  .scene{height:clamp(352px,52vh,510px)}
+  .menu{top:10%;gap:17px}
+  .menu button{width:96px;height:55px;font-size:23px}
+  .person{left:53%;width:75%;transform:translateX(-29%)}
+  .avatar-button svg{height:clamp(325px,44vh,385px)}
+  .person small{font-size:11px;white-space:nowrap}
+  .hunt-button{width:170px;height:75px;font-size:37px}
+  .hunt-home p{font-size:16px}
+  .hunt-home small{font-size:12px}
+  #popup-body{padding:15px 12px 21px}
+  .warditem{padding:7px 5px;gap:5px;min-height:82px}
+  .warditem .item-emoji{width:32px;height:32px;font-size:19px}
+  .warditem strong{font-size:11px}
+  .tab{font-size:11px;padding:10px 1px}
+  .product-art{height:125px}.product-art .avatar-svg{height:162px}
+}
+@media(max-width:350px){.menu button{width:83px;height:50px;font-size:21px}.wallet output{min-width:75px}.person small{font-size:9px}.tab{font-size:10px}.goods{gap:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
