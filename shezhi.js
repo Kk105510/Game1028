@@ -36,11 +36,11 @@ window.WUPIN = [
   {id:'hair-twin-black',type:'hair',name:'黑色·齐刘海双马尾',price:120,hint:'双倍可爱，双倍叛逆。',symbol:'🎀',color:'#25252b'},
   {id:'hair-side-black',type:'hair',name:'黑色·斜刘海披肩长发',price:120,hint:'三分慵懒七分装酷。',symbol:'🌙',color:'#25252b'},
   {id:'hair-wolf-black',type:'hair',name:'黑色·M字刘海狼尾短发',price:120,hint:'今天不帅，算我输。',symbol:'🐺',color:'#25252b'},
-  {id:'hair-pony-brown',type:'hair',name:'浅冷棕·齐刘海马尾',price:180,hint:'温柔是假的，想吃是真的。',symbol:'🎀',color:'#ab8c83'},
+  {id:'hair-pony-brown',type:'hair',name:'浅冷棕·齐刘海马尾',price:180,hint:'棕色款。',symbol:'🎀',color:'#ab8c83'},
   {id:'hair-straight-brown',type:'hair',name:'浅冷棕·齐刘海长直发',price:180,hint:'洗头钱已计入造型费。',symbol:'🍂',color:'#ab8c83'},
-  {id:'hair-twin-brown',type:'hair',name:'浅冷棕·齐刘海双马尾',price:180,hint:'甜度超标，请勿靠近。',symbol:'🍮',color:'#ab8c83'},
-  {id:'hair-side-brown',type:'hair',name:'浅冷棕·斜刘海披肩长发',price:180,hint:'路过的风都想合影。',symbol:'☕',color:'#ab8c83'},
-  {id:'hair-wolf-brown',type:'hair',name:'浅冷棕·M字刘海狼尾短发',price:520,hint:'小狼尾，大野心。',symbol:'🐺',color:'#ab8c83'},
+  {id:'hair-twin-brown',type:'hair',name:'浅冷棕·齐刘海双马尾',price:180,hint:'萌萌哒。',symbol:'🍮',color:'#ab8c83'},
+  {id:'hair-side-brown',type:'hair',name:'浅冷棕·斜刘海披肩长发',price:180,hint:'非常飘扬。',symbol:'☕',color:'#ab8c83'},
+  {id:'hair-wolf-brown',type:'hair',name:'浅冷棕·M字刘海狼尾短发',price:180,hint:'小狼尾。',symbol:'🐺',color:'#ab8c83'},
 
   // ——— 上衣：5 件指定款 + 5 件潮流华丽款 ———
   {id:'top-white',type:'top',name:'白T恤',price:0,hint:'默认皮肤，靠脸硬撑。',symbol:'👕',color:'#fafafa',starter:true},
