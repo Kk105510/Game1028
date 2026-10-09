@@ -1,6 +1,6 @@
 /* youxi.js = 游戏。这里有小人绘制、签到、答题、商店、换装、打猎。
    改题目、商品名字、金币数量、价格，请优先去 shezhi.js。
-   版本 v3：每日题目不重复，题库支持随时追加；五类换装每类十种。
+   版本 v4：清爽小人、每日题目不重复；五类换装每类十种。
 */
 (() => {
 'use strict';
@@ -77,7 +77,7 @@ function storeItems(){
 }
 /* ——————— 用几何 SVG 绘制彩色小人 ——————— */
 const HEAD='M92 103 Q87 56 135 46 Q192 31 218 77 Q231 119 208 158 Q188 186 153 187 Q112 186 96 158 Q83 134 92 103Z';
-const line='stroke="#25252b" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"';
+const line='stroke="#2a2930" stroke-width="2.9" stroke-linejoin="round" stroke-linecap="round"';
 function hairStyle(id){
   const brown=id.endsWith('-brown'),col=brown?'#a58a83':'#29272f',shine=brown?'#d1b3a5':'#53515b';
   const shape=id.split('-')[1]||'pony';
@@ -108,32 +108,36 @@ function hairStyle(id){
   return {back,front};
 }
 function legs(id){
+  // 每条裤子只画一层。长裤不再额外叠加“裸腿”轮廓，避免像穿了两条裤子。
   const map={
-    'pants-black':['#2e2e35','long'], 'pants-jeans':['#668fd0','long'],
-    'pants-white':['#f9faf7','wide'], 'pants-pink':['#f5b9d7','short-puff'],
-    'pants-gray':['#9f9fa7','short'], 'pants-cargo':['#40424c','cargo'],
-    'pants-flare':['#a57fdb','flare'], 'pants-silver':['#c4cfdf','wide'],
-    'pants-plaid':['#d85b70','long'], 'pants-galaxy':['#353963','long']
+    'pants-black':['#34343b','long'],'pants-jeans':['#7195c7','long'],
+    'pants-white':['#f8f8f6','wide'],'pants-pink':['#f3b6cf','short-puff'],
+    'pants-gray':['#a5a5aa','short'],'pants-cargo':['#4c515b','cargo'],
+    'pants-flare':['#a47bd6','flare'],'pants-silver':['#c8d1dc','wide'],
+    'pants-plaid':['#cb6676','long'],'pants-galaxy':['#343a64','long']
   };
-  const [c,fit]=map[id]||map['pants-black'];
-  const skin='<path d="M127 331 L124 423 L138 423 L143 342Z M166 337 L166 425 L180 425 L179 331Z" fill="#ffe9dc"/>';
-  const shoes='<path d="M123 418 Q114 433 100 431 Q93 438 104 442 L145 442 L145 423Z M164 422 Q166 434 175 443 L202 444 Q208 434 183 421Z" fill="#fefefe"/>';
+  const [color,fit]=map[id]||map['pants-black'];
+  const shoes='<path d="M114 419 Q110 428 102 431 Q97 438 108 440 L146 440 L146 423Z M159 423 L159 440 L198 440 Q205 437 197 431 Q186 427 184 419Z" fill="#fff"/>';
+  const waist=`<path d="M118 307 Q150 302 184 307 L183 336 Q151 342 119 336Z" fill="${color}"/>`;
   if(fit.startsWith('short')){
-    const puff=fit==='short-puff';
-    return `${skin}<path d="M118 310 Q148 304 184 310 L188 ${puff?365:355} Q172 ${puff?377:359} 155 ${puff?361:353} Q139 ${puff?377:362} 113 ${puff?365:354}Z" fill="${c}"/><path d="M151 321 L152 357" fill="none"/>${puff?'<path d="M118 365 Q130 374 149 366 M156 363 Q170 374 185 364" fill="none" stroke="#fcedf6" stroke-width="3"/>':''}${shoes}`;
+    const extra=fit==='short-puff'?5:0;
+    return `<path d="M126 338 L126 419 L142 419 L147 350Z M160 350 L164 419 L182 419 L176 338Z" fill="#ffe9dc"/>`
+      +waist+`<path d="M117 323 L150 325 L148 ${355+extra} Q135 ${365+extra} 113 ${356+extra}Z M153 325 L184 323 L189 ${355+extra} Q169 ${365+extra} 153 ${355+extra}Z" fill="${color}"/>`
+      +(extra?'<path d="M116 360 Q130 364 146 359 M158 359 Q173 365 187 359" stroke="#fff3f8" stroke-width="2" fill="none"/>':'')
+      +shoes;
   }
   const wide=fit==='wide'||fit==='flare';
-  const d=wide?'M119 310 Q150 304 184 310 L205 420 L156 422 L149 348 L143 420 L98 420Z':'M120 308 L181 308 L187 424 L159 426 L150 345 L144 423 L116 423Z';
-  let detail='';
-  if(id==='pants-jeans')detail='<path d="M119 333 L134 337 M164 336 L183 331 M125 375 L134 375" fill="none" stroke="#b6d2ec" stroke-width="2"/>';
-  if(id==='pants-white')detail='<path d="M114 334 Q102 378 103 419 M176 334 Q191 388 196 418" fill="none" stroke="#dad9d2" stroke-width="2"/>';
-  if(id==='pants-cargo')detail='<path d="M118 351 L138 350 L139 378 L116 380Z M161 355 L185 351 L184 380 L162 381Z" fill="#5f6470"/><path d="M112 382 L138 397 M159 397 L188 380" fill="none" stroke="#aaadb5" stroke-width="2"/>';
-  if(id==='pants-flare')detail='<path d="M120 332 Q133 360 114 420 M177 327 Q173 370 194 416" fill="none" stroke="#d8b4f3" stroke-width="4"/><path d="M105 407 L145 407 M156 408 L199 407" fill="none" stroke="#f1d2fd" stroke-width="3"/>';
-  if(id==='pants-silver')detail='<path d="M112 350 Q133 360 143 350 M160 358 Q176 369 191 351 M111 394 Q130 401 145 391 M161 395 Q181 405 196 395" fill="none" stroke="#f9ffff" stroke-width="4"/>';
-  if(id==='pants-plaid')detail='<path d="M122 330 L181 331 M120 354 L183 355 M119 378 L186 379 M117 400 L187 401 M135 310 L136 419 M173 312 L177 419" fill="none" stroke="#763945" stroke-width="2" opacity=".7"/>';
-  if(id==='pants-galaxy')detail='<g fill="#ffdf8a" stroke="none"><path d="M128 343 l3 6 7 1 -5 5 1 7 -6 -4 -6 4 1 -7 -5 -5 8 -1z"/><circle cx="176" cy="368" r="3"/><circle cx="124" cy="401" r="2"/><circle cx="172" cy="405" r="2"/></g>';
-  if(id==='pants-black')detail='<path d="M130 331 L126 416 M174 332 L178 414" fill="none" stroke="#63646e" stroke-width="2"/>';
-  return `${skin}<path d="${d}" fill="${c}"/>${detail}${shoes}`;
+  const cargo=fit==='cargo';
+  const left=wide?'M120 327 L147 332 L143 351 L142 421 Q119 423 101 418Z':'M120 327 L148 332 L144 421 Q130 425 115 421Z';
+  const right=wide?'M155 332 L182 327 L203 418 Q184 423 162 421 L160 351Z':'M155 332 L183 327 L187 421 Q172 425 158 421Z';
+  let decoration='';
+  if(id==='pants-jeans')decoration='<path d="M123 340 L137 343 M167 343 L180 340" fill="none" stroke="#bfd2e6" stroke-width="2"/>';
+  if(cargo)decoration='<path d="M120 358 L137 358 L137 378 L120 378Z M165 358 L183 358 L183 378 L165 378Z" fill="#717783" stroke="#383c42" stroke-width="2"/>';
+  if(id==='pants-plaid')decoration='<path d="M119 360 L143 363 M161 363 L185 360 M118 392 L144 392 M160 392 L186 392" fill="none" stroke="#8a424c" stroke-width="2"/>';
+  if(id==='pants-flare')decoration='<path d="M107 410 L142 412 M161 412 L196 410" fill="none" stroke="#e5c8f8" stroke-width="2.5"/>';
+  if(id==='pants-white')decoration='<path d="M117 346 Q108 387 105 416 M184 346 Q195 388 198 416" fill="none" stroke="#dddfe2" stroke-width="2"/>';
+  if(id==='pants-galaxy')decoration='<path d="M130 365 l3 6 6 1 -5 4 1 6 -5 -3 -5 3 1 -6 -5 -4 6 -1Z" fill="#d8d2fa" stroke="none"/>';
+  return waist+`<path d="${left}" fill="${color}"/><path d="${right}" fill="${color}"/>${decoration}${shoes}`;
 }
 function shirt(id){
   const colors={
@@ -151,7 +155,7 @@ function shirt(id){
   let base=`${sleeves}<path d="M123 206 Q151 201 180 207 L187 316 Q148 328 115 315Z" fill="${c}"/><path d="M136 207 Q149 224 165 207" fill="none" stroke="${id==='top-punk'?'#e2cde5':'#85838a'}" stroke-width="2"/>`;
   if(id==='top-gray')base=`<path d="M126 206 L177 207 L184 315 Q148 327 117 315Z" fill="${c}"/><path d="M125 209 Q150 231 178 208" fill="none" stroke="#666" stroke-width="3"/>`;
   let decorations='';
-  if(id==='top-white')decorations='<path d="M135 247 Q149 258 164 247" fill="none" stroke="#d1d1d1" stroke-width="2"/><circle cx="149" cy="270" r="3" fill="#ff7f9d" stroke="none"/>';
+  if(id==='top-white')decorations=''; // 默认白 T 不放红点、按钮或假装饰。
   if(id==='top-punk')decorations='<path d="M118 228 L181 267 M181 228 L118 267" stroke="#ed466b" stroke-width="7" fill="none"/><path d="M145 242 l-9 20 13 -4 -6 22 22 -30 -13 4 5 -12Z" fill="#f8f8f8" stroke-width="2"/><path d="M82 278 L100 281 M205 281 L222 277" stroke="#aaa" stroke-width="3"/>';
   if(id==='top-pink')decorations='<g stroke="#fff5f9" stroke-width="2.5" fill="none"><path d="M116 297 Q149 308 186 295 M116 309 Q149 317 187 309 M125 232 Q149 240 177 231"/></g><path d="M150 244 L132 231 L131 256 L150 248 L169 256 L170 231Z" fill="#fa719e"/><circle cx="150" cy="244" r="5" fill="#fff"/>';
   if(id==='top-duck')decorations='<g><ellipse cx="150" cy="265" rx="20" ry="17" fill="#ffe990" stroke="#b17a20" stroke-width="2"/><circle cx="144" cy="259" r="3.5" fill="#292929" stroke="none"/><path d="M151 266 l14 3 -14 7Z" fill="#ff963c"/><path d="M160 257 Q170 251 174 263" fill="none" stroke="#b17a20" stroke-width="2"/></g>';
@@ -198,13 +202,17 @@ function faceShape(id){
 }
 function avatarSvg(equip={}){
   const e={...defaults,...equip},hair=hairStyle(e.hair||defaults.hair);
-  const bodyArms='<path d="M121 220 Q101 252 87 294 L79 323 Q81 332 90 330 L112 282 M184 221 Q199 250 216 298 L225 325 Q219 335 212 326 L192 276" fill="none" stroke="#ffe3d4" stroke-width="15"/>';
-  return `<svg class="avatar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="45 5 220 450" role="img" aria-label="可爱彩色换装小人">
-    <g ${line}>${legs(e.pants)}${bodyArms}<path d="M144 169 L143 218 L172 218 L171 165Z" fill="#ffe8d8"/>${shirt(e.top)}
-    ${hair.back}<path d="${HEAD}" fill="#fff0e6"/><path d="M111 158 Q120 165 132 158 M179 159 Q191 164 198 155" fill="none" stroke="#f9bbbd" stroke-width="3"/>
-    <path d="M119 114 Q117 127 120 130 M185 113 Q185 126 182 129" fill="none" stroke="#24232a" stroke-width="4.4"/>
-    <path d="M137 152 Q150 165 165 149" fill="none" stroke="#302d33" stroke-width="3.5"/>
-    <ellipse cx="113" cy="141" rx="9" ry="4" fill="#ffb4b6" stroke="none" opacity=".75"/><ellipse cx="195" cy="140" rx="9" ry="4" fill="#ffb4b6" stroke="none" opacity=".75"/>
+  // 手只到腰部左右，不再延伸到裤腿；长袖额外露出一点点手掌。
+  const arms='<path d="M113 217 Q104 225 102 241 L91 273 Q88 283 95 287 Q104 290 108 278 L123 241 L128 221Z" fill="#ffe8d9"/>'
+    +'<path d="M183 217 Q192 225 198 243 L211 274 Q216 286 208 290 Q199 293 194 279 L178 240 L174 221Z" fill="#ffe8d9"/>';
+  const longSleeves=['top-punk','top-racer','top-tech','top-purple','top-velvet'].includes(e.top);
+  const hands=longSleeves?'<path d="M81 288 Q81 299 89 301 Q97 301 98 291Z M205 291 Q207 300 215 300 Q223 296 221 287Z" fill="#ffe8d9"/>':'';
+  return `<svg class="avatar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="45 5 220 450" role="img" aria-label="简洁可爱的换装小人">
+    <g ${line}>${legs(e.pants)}${arms}<path d="M141 169 L142 215 L172 215 L172 165Z" fill="#ffe8d9"/>
+    ${shirt(e.top)}${hands}
+    ${hair.back}<path d="${HEAD}" fill="#fff0e6"/>
+    <path d="M121 114 Q118 123 121 128 M183 114 Q186 124 183 128" fill="none" stroke="#29272d" stroke-width="4.2"/>
+    <path d="M138 151 Q151 163 164 150" fill="none" stroke="#29272d" stroke-width="3.5"/>
     ${hair.front}${faceShape(e.face)}${hatShape(e.hat)}</g>
   </svg>`;
 }
@@ -226,7 +234,7 @@ dialog.addEventListener('click',ev=>{if(ev.target===dialog)close()});
 dialog.addEventListener('close',()=>{if(tick){clearInterval(tick);tick=null}});
 /* 1. 签到 */
 function qiandao(){
-  modal('每日签到 · 白嫖快乐');let y=new Date().getFullYear(),m=new Date().getMonth();
+  modal('奇妙小签到');let y=new Date().getFullYear(),m=new Date().getMonth();
   function draw(){
     let cells=['一','二','三','四','五','六','日'].map(x=>`<div class="weekday">${x}</div>`).join('');
     cells+='<div class="blank"></div>'.repeat((new Date(y,m,1).getDay()+6)%7);
@@ -291,7 +299,7 @@ function dati(){
   function draw(){
     const {question:q,done,asked,total}=dailyQuiz();
     if(!q){
-      body.innerHTML=`<div class="paper"><h3>${done?'今天已经答过啦！':'题库被你刷通关啦！'}</h3><p>${done?'今日 100 金币已经结算，明天再来。':'已出过 '+asked+' 道题，暂时没有新题了。'}</p><p>想继续开考？去 <b>shezhi.js</b> 的 <b>timu</b> 最后追加题目，刷新网站就能继续；旧题不会重来。</p></div>`;
+      body.innerHTML=`<div class="paper"><h3>${done?'今天已经答过啦！':'题库被你刷通关啦！'}</h3><p>${done?'今日 100 金币已经结算，明天再来。':'已出过 '+asked+' 道题，暂时没有新题了。'}</p></div>`;
       return;
     }
     const day=today();
@@ -329,7 +337,7 @@ function shangdian(){
 }
 /* 4. 衣柜：五个分类，每类十种；未解锁也展示，不能穿。 */
 function yigui(){
-  modal('快乐衣柜 · 每天换个身份');let kind='hair';
+  modal('奇妙小衣柜');let kind='hair';
   function draw(){
     const all=ITEMS.filter(x=>x.type===kind),owned=all.filter(x=>state.inventory.includes(x.id));
     const tabs=Object.keys(CATEGORY).map(t=>`<button class="tab ${t===kind?'active':''}" data-tab="${t}">${CATEGORY[t]}</button>`).join('');
@@ -337,7 +345,7 @@ function yigui(){
       const have=state.inventory.includes(x.id),wear=state.equipped[kind]===x.id;
       return `<button class="warditem ${wear?'active':''} ${have?'':'locked'}" style="--tint:${esc(x.color)}3e" data-wear="${esc(x.id)}" ${have?'':'disabled'}><span class="item-emoji">${esc(x.symbol)}</span><span><strong>${esc(x.name)}</strong><small>${wear?'✓ 现在穿着':have?'点击立刻穿上':'🔒 未解锁'}</small></span></button>`;
     }).join('');
-    body.innerHTML=`<p class="intro">谁说衣柜没满不能出门？主打一个随时变脸。💅</p><div class="preview">${avatarSvg(state.equipped)}<small>实时试衣间 · 美貌不负责售后</small></div><div class="tabs">${tabs}</div><p class="closet-count">${CATEGORY[kind]}：已拥有 ${owned.length} / ${all.length}</p>${['hat','face'].includes(kind)?'<button class="takeoff" data-wear="">✕ 今天想素一点：取下这件</button>':''}<div class="ward-grid">${cards}</div><p class="sub">未解锁的去每日商店碰运气，或让小人打猎捡回来。</p>`;
+    body.innerHTML=`<div class="preview">${avatarSvg(state.equipped)}<small>实时试衣间 · 美貌不负责售后</small></div><div class="tabs">${tabs}</div><p class="closet-count">${CATEGORY[kind]}：已拥有 ${owned.length} / ${all.length}</p>${['hat','face'].includes(kind)?'<button class="takeoff" data-wear="">✕ 今天想素一点：取下这件</button>':''}<div class="ward-grid">${cards}</div><p class="sub">未解锁的去每日商店碰运气，或让小人打猎捡回来。</p>`;
     body.querySelectorAll('[data-tab]').forEach(b=>b.onclick=()=>{kind=b.dataset.tab;draw()});
     body.querySelectorAll('[data-wear]').forEach(b=>b.onclick=()=>{
       const id=b.dataset.wear,x=BY[id];
