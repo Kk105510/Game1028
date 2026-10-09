@@ -1,6 +1,6 @@
 /* youxi.js = 游戏。这里有小人绘制、签到、答题、商店、换装、打猎。
    改题目、商品名字、金币数量、价格，请优先去 shezhi.js。
-   版本 v4：清爽小人、每日题目不重复；五类换装每类十种。
+   版本 v5：自然手臂与小手、每日题目不重复；五类换装每类十种。
 */
 (() => {
 'use strict';
@@ -202,14 +202,14 @@ function faceShape(id){
 }
 function avatarSvg(equip={}){
   const e={...defaults,...equip},hair=hairStyle(e.hair||defaults.hair);
-  // 手只到腰部左右，不再延伸到裤腿；长袖额外露出一点点手掌。
-  const arms='<path d="M113 217 Q104 225 102 241 L91 273 Q88 283 95 287 Q104 290 108 278 L123 241 L128 221Z" fill="#ffe8d9"/>'
-    +'<path d="M183 217 Q192 225 198 243 L211 274 Q216 286 208 290 Q199 293 194 279 L178 240 L174 221Z" fill="#ffe8d9"/>';
-  const longSleeves=['top-punk','top-racer','top-tech','top-purple','top-velvet'].includes(e.top);
-  const hands=longSleeves?'<path d="M81 288 Q81 299 89 301 Q97 301 98 291Z M205 291 Q207 300 215 300 Q223 296 221 287Z" fill="#ffe8d9"/>':'';
+  // 胳膊自然延伸到胯部附近，末端是圆润的小手（不是断开的短棒）。
+  // 手臂先画，袖子随后盖住上半部分；所有上衣共用同一套手部结构。
+  const arms='<path d="M113 220 Q104 227 101 245 L91 275 L87 290 Q82 296 85 304 Q88 313 95 313 Q104 312 107 302 Q107 298 104 294 L114 263 L128 227Z" fill="#ffe8d9"/>'
+    +'<path d="M185 220 Q194 228 199 245 L209 275 L214 291 Q220 297 216 305 Q211 313 203 312 Q196 310 195 301 Q195 297 198 293 L186 263 L172 226Z" fill="#ffe8d9"/>';
+  // 袖子覆盖手臂时，皮肤仍在末端露出，长袖和短袖都能看出小手。
   return `<svg class="avatar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="45 5 220 450" role="img" aria-label="简洁可爱的换装小人">
     <g ${line}>${legs(e.pants)}${arms}<path d="M141 169 L142 215 L172 215 L172 165Z" fill="#ffe8d9"/>
-    ${shirt(e.top)}${hands}
+    ${shirt(e.top)}
     ${hair.back}<path d="${HEAD}" fill="#fff0e6"/>
     <path d="M121 114 Q118 123 121 128 M183 114 Q186 124 183 128" fill="none" stroke="#29272d" stroke-width="4.2"/>
     <path d="M138 151 Q151 163 164 150" fill="none" stroke="#29272d" stroke-width="3.5"/>
