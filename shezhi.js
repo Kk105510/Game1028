@@ -5,7 +5,7 @@
 */
 window.SHEZHI = {
   mingzi: 'Game1028 · 摸鱼宇宙',
-  chushi: 2000,       // 第一次打开游戏的金币
+  chushi: 0,       // 第一次打开游戏的金币
   qiandao: 100,       // 签到奖励
   dati: 100,          // 答题奖励
   xiaoshi: 6,         // 打猎时间（小时）
@@ -32,14 +32,14 @@ window.SHEZHI = {
 window.WUPIN = [
   // ——— 发型：五种造型 × 两种发色 ———
   {id:'hair-pony-black',type:'hair',name:'黑色·齐刘海马尾',price:0,hint:'素颜也要有主角BGM。',symbol:'🎀',color:'#202024',starter:true},
-  {id:'hair-straight-black',type:'hair',name:'黑色·齐刘海长直发',price:210,hint:'一甩头，风都要排队。',symbol:'🖤',color:'#25252b'},
-  {id:'hair-twin-black',type:'hair',name:'黑色·齐刘海双马尾',price:270,hint:'双倍可爱，双倍叛逆。',symbol:'🎀',color:'#25252b'},
-  {id:'hair-side-black',type:'hair',name:'黑色·斜刘海披肩长发',price:320,hint:'三分慵懒七分装酷。',symbol:'🌙',color:'#25252b'},
-  {id:'hair-wolf-black',type:'hair',name:'黑色·M字刘海狼尾短发',price:350,hint:'今天不帅，算我输。',symbol:'🐺',color:'#25252b'},
-  {id:'hair-pony-brown',type:'hair',name:'浅冷棕·齐刘海马尾',price:390,hint:'温柔是假的，想吃是真的。',symbol:'🎀',color:'#ab8c83'},
-  {id:'hair-straight-brown',type:'hair',name:'浅冷棕·齐刘海长直发',price:420,hint:'洗头钱已计入造型费。',symbol:'🍂',color:'#ab8c83'},
-  {id:'hair-twin-brown',type:'hair',name:'浅冷棕·齐刘海双马尾',price:450,hint:'甜度超标，请勿靠近。',symbol:'🍮',color:'#ab8c83'},
-  {id:'hair-side-brown',type:'hair',name:'浅冷棕·斜刘海披肩长发',price:480,hint:'路过的风都想合影。',symbol:'☕',color:'#ab8c83'},
+  {id:'hair-straight-black',type:'hair',name:'黑色·齐刘海长直发',price:120,hint:'一甩头，风都要排队。',symbol:'🖤',color:'#25252b'},
+  {id:'hair-twin-black',type:'hair',name:'黑色·齐刘海双马尾',price:120,hint:'双倍可爱，双倍叛逆。',symbol:'🎀',color:'#25252b'},
+  {id:'hair-side-black',type:'hair',name:'黑色·斜刘海披肩长发',price:120,hint:'三分慵懒七分装酷。',symbol:'🌙',color:'#25252b'},
+  {id:'hair-wolf-black',type:'hair',name:'黑色·M字刘海狼尾短发',price:120,hint:'今天不帅，算我输。',symbol:'🐺',color:'#25252b'},
+  {id:'hair-pony-brown',type:'hair',name:'浅冷棕·齐刘海马尾',price:180,hint:'温柔是假的，想吃是真的。',symbol:'🎀',color:'#ab8c83'},
+  {id:'hair-straight-brown',type:'hair',name:'浅冷棕·齐刘海长直发',price:180,hint:'洗头钱已计入造型费。',symbol:'🍂',color:'#ab8c83'},
+  {id:'hair-twin-brown',type:'hair',name:'浅冷棕·齐刘海双马尾',price:180,hint:'甜度超标，请勿靠近。',symbol:'🍮',color:'#ab8c83'},
+  {id:'hair-side-brown',type:'hair',name:'浅冷棕·斜刘海披肩长发',price:180,hint:'路过的风都想合影。',symbol:'☕',color:'#ab8c83'},
   {id:'hair-wolf-brown',type:'hair',name:'浅冷棕·M字刘海狼尾短发',price:520,hint:'小狼尾，大野心。',symbol:'🐺',color:'#ab8c83'},
 
   // ——— 上衣：5 件指定款 + 5 件潮流华丽款 ———
