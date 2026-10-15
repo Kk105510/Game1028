@@ -21,7 +21,9 @@ window.SHEZHI = {
     { question:'我在读什么专业', options:['创造策划','策展制作','创意策划'], answer:0 },
     { question:'我在家附近最常吃什么', options:['意面','披萨','焗饭'], answer:1 },
     { question:'我喜欢的颜色是', options:['红色','黄色','蓝色'], answer:2 },
-    { question:'我喜欢打什么游戏', options:['王者荣耀','第五人格','瓦罗兰特'], answer:1 }
+    { question:'我喜欢打什么游戏', options:['王者荣耀','ff14','瓦罗兰特'], answer:1 }
+    { question:'我是什么mbti', options:['entp','estp','entj'], answer:0 }
+    { question:'我是什么星座', options:['双子座','水瓶座','射手座'], answer:2 }
   ]
 };
 
