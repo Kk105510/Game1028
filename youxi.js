@@ -249,7 +249,7 @@ function qiandao(){
     $('sign').onclick=()=>{if(state.checkins.includes(today()))return;state.checkins.push(today());state.coins+=P.qiandao;save();tip(`签到成功！+${P.qiandao} 金币，富得很克制。`);draw()};
   }draw();
 }
-/* 2. 答题：每天一道，出过的不再出；题库随时可扩充。 */
+/* 2. 答题：每天一道，出过的不再出 */
 function quizBank(){
   const ids=new Set();
   return (Array.isArray(P.timu)?P.timu:[]).filter(q=>
@@ -295,11 +295,11 @@ function dailyQuiz(){
   return {question:q,done:false,asked:state.quizAskedIds.length,total:bank.length};
 }
 function dati(){
-  modal('每日答题 · 家庭八卦考场');let chosen=-1,wrong=false;
+  modal('每日答题 · 家庭考场');let chosen=-1,wrong=false;
   function draw(){
     const {question:q,done,asked,total}=dailyQuiz();
     if(!q){
-      body.innerHTML=`<div class="paper"><h3>${done?'今天已经答过啦！':'题库被你刷通关啦！'}</h3><p>${done?'今日 100 金币已经结算，明天再来。':'已出过 '+asked+' 道题，暂时没有新题了。'}</p></div>`;
+      body.innerHTML=`<div class="paper"><h3>${done?'今天已经答过啦！':'题库被你刷通关啦！'}</h3><p>${done?'今日 100 金币已经结算，明天再来。':'已出过 '+asked+' 道题。'}</p></div>`;
       return;
     }
     const day=today();
@@ -367,7 +367,7 @@ function dalie(){
       const coins=rand(P.zuishao,P.zuiduo),unowned=ITEMS.filter(x=>!x.starter&&!state.inventory.includes(x.id));
       const gift=unowned.length&&Math.random()<P.liwu?unowned[rand(0,unowned.length-1)]:null;
       state.coins+=coins;if(gift)state.inventory.push(gift.id);state.hunt=null;save();
-      result=`💰 ${coins} 金币！<p>${gift?`离谱！还捡到「${esc(gift.name)}」！已塞进衣柜。`:'没捡到衣服，可能是森林里没开服装店。'}</p>`;
+      result=`💰 ${coins} 金币！<p>${gift?`离谱！还捡到「${esc(gift.name)}」！已塞进衣柜。`:'没捡到衣服，可惜可惜之呀！'}</p>`;
       tip(`到账 ${coins} 金币，钱包稍微挺直了腰。`);draw();
     };
   }
